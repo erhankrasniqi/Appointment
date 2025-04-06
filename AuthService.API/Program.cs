@@ -18,23 +18,55 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-//builder.Services.AddAuthorization();
+
+// Shto Swagger dhe konfigurimin e autorizimit me JWT
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "AuthService API",
+        Version = "v1"
+    });
+
+    // Shto përkufizimin për autorizimin JWT në Swagger
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Please enter token",
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey
+    });
+
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
 
 // Shto konfigurimin e DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-// Register JWT token generator and other services
+// Regjistro JWT token generator dhe shërbime të tjera
 builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
-// Register MediatR 
+// Regjistro MediatR 
+builder.Services.AddMediatR(typeof(LoginUserCommand).Assembly);
 builder.Services.AddMediatR(typeof(RegisterUserCommand).Assembly);
 
-// Configure JWT Authentication
+// Konfigurimi i JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -58,13 +90,17 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "AuthService API V1");
+        c.RoutePrefix = "swagger"; // e bën të hapet te /swagger/index.html
+    });
 }
 
 app.UseHttpsRedirection();
 
-// Add authentication before authorization
-app.UseAuthentication(); // This is needed to validate the JWT token
+// Aktivizoni Authentication dhe Authorization
+app.UseAuthentication(); // Kjo është e nevojshme për të validuar tokenin JWT
 app.UseAuthorization();
 
 app.MapControllers();

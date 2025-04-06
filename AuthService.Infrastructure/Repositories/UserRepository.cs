@@ -1,7 +1,7 @@
 ﻿using AuthService.Domain.Entities;
 using AuthService.Domain.Repositories;
 using AuthService.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore; 
 
 namespace AuthService.Infrastructure.Repositories
 {
@@ -28,6 +28,11 @@ namespace AuthService.Infrastructure.Repositories
         public async Task<bool> UserExistsAsync(string email)
         {
             return await _context.Users.AnyAsync(u => u.Email == email);
+        }
+
+        public async Task<List<User>> GetAllAsync()
+        {
+            return await _context.Users.ToListAsync();
         }
     }
 }

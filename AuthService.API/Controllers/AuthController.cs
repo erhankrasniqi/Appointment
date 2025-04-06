@@ -1,4 +1,5 @@
 ﻿using AuthService.Application.Commands;
+using AuthService.Application.Queris;
 using AuthService.Domain.Common;
 using AuthService.Domain.Repositories;
 using AuthService.Domain.Security;
@@ -48,6 +49,13 @@ namespace AuthService.API.Controllers
             }
 
             return Ok(new { Token = result.Data });
+        }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var result = await _mediator.Send(new GetAllUsersQuery());
+            return Ok(result);
         }
 
 

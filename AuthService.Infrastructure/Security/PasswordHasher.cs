@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using AuthService.Domain.Security;
-using Microsoft.AspNet.Identity.EntityFramework;
+using AuthService.Domain.Security; 
 using AuthService.Domain.Entities;
 
 namespace AuthService.Infrastructure.Security
