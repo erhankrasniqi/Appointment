@@ -6,18 +6,27 @@ using AuthService.Infrastructure.Repositories;
 using AuthService.Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Reflection;
-using System.Text;
+using System.Text; 
+using Messaging.RabbitMQ.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// Shto RabbitMQSettings në DI container
+builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMqSettings"));
+
+// Krijo RabbitMQConnection
+builder.Services.AddSingleton<RabbitMQConnection>(provider =>
+{
+    var settings = provider.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
+    return new RabbitMQConnection(settings.HostName, "guest", "guest"); // Përdorni kredencialet e duhura
+});
 
 // Shto Swagger dhe konfigurimin e autorizimit me JWT
 builder.Services.AddSwaggerGen(c =>
