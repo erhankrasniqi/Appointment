@@ -11,6 +11,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text; 
 using Messaging.RabbitMQ.Settings;
+using Messaging.RabbitMQ.Service;
+using Messaging.RabitMQ.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMqSettings"));
 
 // Krijo RabbitMQConnection
+
 builder.Services.AddSingleton<RabbitMQConnection>(provider =>
 {
     var settings = provider.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
@@ -70,6 +73,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddSingleton<IMessagePublisher, RabbitMqService>();
 
 // Regjistro AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -77,6 +81,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Regjistro MediatR 
 builder.Services.AddMediatR(typeof(LoginUserCommand).Assembly);
 builder.Services.AddMediatR(typeof(RegisterUserCommand).Assembly);
+
 
 // Konfigurimi i JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

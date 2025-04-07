@@ -21,7 +21,7 @@ namespace Messaging.RabbitMQ.Service
             _settings = section.Get<RabbitMqSettings>();
 
 
-            _rabbitConnection = new RabbitMQConnection(_settings.HostName, _settings.QueueName, _settings.ExchangeName);
+            _rabbitConnection = new RabbitMQConnection(_settings.HostName, "guest", "guest");
             _channel = _rabbitConnection.CreateChannel();
         }
 
