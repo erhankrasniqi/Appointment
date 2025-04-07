@@ -1,4 +1,5 @@
-﻿using AuthService.Domain.Entities;
+﻿using AuthService.Application.DTOs;
+using AuthService.Domain.Entities;
 using AuthService.Domain.Repositories;
 using AuthService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore; 

@@ -3,19 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Appontment.AuthService", "Appontment.AuthService", "{262AFA95-8EAE-49C3-BF78-60BED280251A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Appointment.AuthService", "Appointment.AuthService", "{262AFA95-8EAE-49C3-BF78-60BED280251A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.API", "AuthService.API\AuthService.API.csproj", "{7642DADB-99CD-4B79-BB57-B7E115D15B43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthService.API", "AuthService.API\AuthService.API.csproj", "{7642DADB-99CD-4B79-BB57-B7E115D15B43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.Domain", "AuthService.Domain\AuthService.Domain.csproj", "{CC5709EA-59B9-4809-AF33-12DF30BE05CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthService.Domain", "AuthService.Domain\AuthService.Domain.csproj", "{CC5709EA-59B9-4809-AF33-12DF30BE05CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.Infrastructure", "AuthService.Infrastructure\AuthService.Infrastructure.csproj", "{096DDCED-5F84-4921-B6EF-F150B5AA88AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthService.Infrastructure", "AuthService.Infrastructure\AuthService.Infrastructure.csproj", "{096DDCED-5F84-4921-B6EF-F150B5AA88AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.Application", "AuthService.Application\AuthService.Application.csproj", "{91D1E89C-D4B5-4F79-8C1D-C5B56B98147A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthService.Application", "AuthService.Application\AuthService.Application.csproj", "{91D1E89C-D4B5-4F79-8C1D-C5B56B98147A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Appontment.SharedKernel", "Appontment.SharedKernel", "{16B10D4C-4CC6-47E0-A3F2-0141B62E9938}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Appointment.SharedKernel", "Appointment.SharedKernel", "{16B10D4C-4CC6-47E0-A3F2-0141B62E9938}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedKernel", "SharedKernel\SharedKernel.csproj", "{6902CD73-F71E-4C04-B14C-B53E21566EFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedKernel", "SharedKernel\SharedKernel.csproj", "{6902CD73-F71E-4C04-B14C-B53E21566EFD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Appointment.UserManagment", "Appointment.UserManagment", "{2BC21E58-F621-4E8E-820C-B8922213DE18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Domain", "UserManagement.Domain\UserManagement.Domain.csproj", "{D7778495-0B69-4C52-89E5-128323E8D545}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Application", "UserManagement.Application\UserManagement.Application.csproj", "{245C0EF1-90A9-4725-B7F9-CF384E547B57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Infrastructure", "UserManagement.Infrastructure\UserManagement.Infrastructure.csproj", "{DDDDBD2F-818A-4F08-A51D-479F3EBA901A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.API", "UserManagement.API\UserManagement.API.csproj", "{392209BD-3AC3-4066-B388-9950D3B94F9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +53,22 @@ Global
 		{6902CD73-F71E-4C04-B14C-B53E21566EFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6902CD73-F71E-4C04-B14C-B53E21566EFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6902CD73-F71E-4C04-B14C-B53E21566EFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7778495-0B69-4C52-89E5-128323E8D545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7778495-0B69-4C52-89E5-128323E8D545}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7778495-0B69-4C52-89E5-128323E8D545}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7778495-0B69-4C52-89E5-128323E8D545}.Release|Any CPU.Build.0 = Release|Any CPU
+		{245C0EF1-90A9-4725-B7F9-CF384E547B57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{245C0EF1-90A9-4725-B7F9-CF384E547B57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{245C0EF1-90A9-4725-B7F9-CF384E547B57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{245C0EF1-90A9-4725-B7F9-CF384E547B57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDDDBD2F-818A-4F08-A51D-479F3EBA901A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDDDBD2F-818A-4F08-A51D-479F3EBA901A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDDDBD2F-818A-4F08-A51D-479F3EBA901A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDDDBD2F-818A-4F08-A51D-479F3EBA901A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{392209BD-3AC3-4066-B388-9950D3B94F9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{392209BD-3AC3-4066-B388-9950D3B94F9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{392209BD-3AC3-4066-B388-9950D3B94F9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{392209BD-3AC3-4066-B388-9950D3B94F9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +79,10 @@ Global
 		{096DDCED-5F84-4921-B6EF-F150B5AA88AA} = {262AFA95-8EAE-49C3-BF78-60BED280251A}
 		{91D1E89C-D4B5-4F79-8C1D-C5B56B98147A} = {262AFA95-8EAE-49C3-BF78-60BED280251A}
 		{6902CD73-F71E-4C04-B14C-B53E21566EFD} = {16B10D4C-4CC6-47E0-A3F2-0141B62E9938}
+		{D7778495-0B69-4C52-89E5-128323E8D545} = {2BC21E58-F621-4E8E-820C-B8922213DE18}
+		{245C0EF1-90A9-4725-B7F9-CF384E547B57} = {2BC21E58-F621-4E8E-820C-B8922213DE18}
+		{DDDDBD2F-818A-4F08-A51D-479F3EBA901A} = {2BC21E58-F621-4E8E-820C-B8922213DE18}
+		{392209BD-3AC3-4066-B388-9950D3B94F9F} = {2BC21E58-F621-4E8E-820C-B8922213DE18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {945FEC5E-62CF-4A42-8325-E2FC6BBB2622}

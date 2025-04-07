@@ -1,4 +1,5 @@
-﻿using AuthService.Domain.Entities;
+﻿using AuthService.Application.DTOs;
+using AuthService.Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace AuthService.Application.Queris
 {
-    public class GetAllUsersQuery : IRequest<List<User>> { }
+    public class GetAllUsersQuery : IRequest<List<UserDto>> { }
 }

@@ -62,6 +62,9 @@ builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
+// Regjistro AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 // Regjistro MediatR 
 builder.Services.AddMediatR(typeof(LoginUserCommand).Assembly);
 builder.Services.AddMediatR(typeof(RegisterUserCommand).Assembly);
