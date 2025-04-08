@@ -12,11 +12,11 @@ namespace UserManagement.Domain.Entities
 
         // Konstruktor pa parametra
         public User() { }
-        public User(string name, string surnameName, DateTime birthDate, int authId, Address address)
+        public User(string name, string surnameName, DateTime brithDate, int authId, Address address)
         {
             Name = name;
             SurnameName = surnameName;
-            BirthDate = birthDate;
+            BirthDate = brithDate;
             AuthId = authId;
             Address = address;
         }

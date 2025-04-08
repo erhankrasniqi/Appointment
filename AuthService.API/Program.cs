@@ -13,6 +13,7 @@ using System.Text;
 using Messaging.RabbitMQ.Settings;
 using Messaging.RabbitMQ.Service;
 using Messaging.RabitMQ.Interfaces;
+using Messaging.RabitMQ.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +75,7 @@ builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddSingleton<IMessagePublisher, RabbitMqService>();
+builder.Services.AddSingleton<IUserRegisteredPublisher, UserRegisteredPublisher>();
 
 // Regjistro AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

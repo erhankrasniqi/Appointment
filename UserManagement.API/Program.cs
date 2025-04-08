@@ -1,6 +1,6 @@
-
 using MediatR;
-using Messaging.RabbitMQ.Settings;
+using Messaging.RabbitMQ.Service;
+using Messaging.RabbitMQ.Settings; 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -10,6 +10,8 @@ using UserManagement.Application.Commands;
 using UserManagement.Domain.Repositories;
 using UserManagement.Infrastructure.Data;
 using UserManagement.Infrastructure.Repositories;
+using Messaging.RabitMQ.Interfaces;
+using Messaging.RabitMQ.Service; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,26 +19,26 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Shto RabbitMQSettings në DI container
+// Configure RabbitMQSettings in DI container
 builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMqSettings"));
 
-// Krijo RabbitMQConnection
+// Create RabbitMQ connection
 builder.Services.AddSingleton<RabbitMQConnection>(provider =>
 {
     var settings = provider.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
-    return new RabbitMQConnection(settings.HostName, "guest", "guest"); // Përdorni kredencialet e duhura
+    return new RabbitMQConnection(settings.HostName, "guest", "guest"); // Use proper credentials
 });
 
-// Shto Swagger dhe konfigurimin e autorizimit me JWT
+// Configure Swagger and JWT authorization
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
-        Title = "AuthService API",
+        Title = "UsereManagment API",
         Version = "v1"
     });
 
-    // Shto përkufizimin për autorizimin JWT në Swagger
+    // Add security definition for JWT Authorization
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
@@ -61,20 +63,23 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Shto konfigurimin e DbContext
+// Configure DbContext
 builder.Services.AddDbContext<UserManagmentDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Regjistro JWT token generator dhe shërbime të tjera 
+// Register JWT token generator and other services
 builder.Services.AddScoped<IUserRepository, UserRepository>(); 
+builder.Services.AddSingleton<IMessagePublisher, RabbitMqService>();
+builder.Services.AddHostedService<UserRegisteredConsumer>();
 
-// Regjistro AutoMapper
+
+// Register AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-// Regjistro MediatR 
-builder.Services.AddMediatR(typeof(AddUserCommand).Assembly); 
+// Register MediatR
+builder.Services.AddMediatR(typeof(AddUserCommand).Assembly);
 
-// Konfigurimi i JWT Authentication
+// Configure JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -100,15 +105,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "AuthService API V1");
-        c.RoutePrefix = "swagger"; // e bën të hapet te /swagger/index.html
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "UsereManagment API V1");
+        c.RoutePrefix = "swagger"; // Open Swagger UI at /swagger/index.html
     });
 }
 
 app.UseHttpsRedirection();
 
-// Aktivizoni Authentication dhe Authorization
-app.UseAuthentication(); // Kjo është e nevojshme për të validuar tokenin JWT
+// Enable Authentication and Authorization
+app.UseAuthentication(); // Necessary to validate JWT token
 app.UseAuthorization();
 
 app.MapControllers();

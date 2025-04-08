@@ -32,6 +32,7 @@ namespace Messaging.RabbitMQ.Settings
 
         public void CloseConnection()
         {
+            // Sigurohu që të mbyllësh lidhjen dhe kanalin për të shmangur leaks
             _connection?.Close();
         }
 

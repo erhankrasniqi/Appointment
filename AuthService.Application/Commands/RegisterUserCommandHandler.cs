@@ -2,8 +2,9 @@
 using AuthService.Domain.Entities;
 using AuthService.Domain.Repositories;
 using AuthService.Domain.Security;
-using MediatR;
-
+using MediatR; 
+using Messaging.RabitMQ.Interfaces;
+using SharedKernel.Contracts;
 
 namespace AuthService.Application.Commands
 {
@@ -11,11 +12,16 @@ namespace AuthService.Application.Commands
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IUserRegisteredPublisher _userRegisteredPublisher;
 
-        public RegisterUserCommandHandler(IUserRepository userRepository, IPasswordHasher passwordHasher)
+        public RegisterUserCommandHandler(
+            IUserRepository userRepository,
+            IPasswordHasher passwordHasher,
+            IUserRegisteredPublisher userRegisteredPublisher)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
+            _userRegisteredPublisher = userRegisteredPublisher;
         }
 
         public async Task<Result> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
@@ -27,7 +33,17 @@ namespace AuthService.Application.Commands
 
             var passwordHash = _passwordHasher.HashPassword(request.Password);
             var user = new User(request.FullName, request.Email, passwordHash);
+
             await _userRepository.AddAsync(user);
+
+            // Publiko eventin në RabbitMQ
+            var userRegisteredEvent = new UserRegisteredEvent
+            {
+                UserId = user.Id,
+                Email = user.Email
+            };
+
+            await _userRegisteredPublisher.PublishUserRegisteredEventAsync(userRegisteredEvent);
 
             return Result.Success("User registered successfully");
         }

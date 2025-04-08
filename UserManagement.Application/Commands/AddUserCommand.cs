@@ -9,7 +9,7 @@ namespace UserManagement.Application.Commands
     {
         public string Name { get;  set; }
         public string SurnameName { get;  set; }
-        public DateTime BrithDate { get;  set; }
+        public DateTime? BrithDate { get;  set; }
         public int AuthId { get; set; }  
         public AddressDto Address { get; init; }
 

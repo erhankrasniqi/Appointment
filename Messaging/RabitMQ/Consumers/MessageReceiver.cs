@@ -1,56 +1,52 @@
 ﻿using Messaging.RabbitMQ.Settings;
-using Messaging.RabbitMQ.Settings;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
-using System.Text;
 
-namespace Messaging.RabitMQ.Consumers
+public class MessageReceiver
 {
-    public class MessageReceiver
+    private readonly RabbitMQConnection _rabbitMqConnection;
+
+    public MessageReceiver(RabbitMQConnection rabbitMqConnection)
     {
-        private readonly RabbitMQConnection _rabbitMqConnection;
+        _rabbitMqConnection = rabbitMqConnection;
+    }
 
-        public MessageReceiver(RabbitMQConnection rabbitMqConnection)
+    public void ReceiveMessage(string queueName)
+    {
+        var channel = _rabbitMqConnection.CreateChannel(); // ✅ Përdor CreateChannel
+
+        try
         {
-            _rabbitMqConnection = rabbitMqConnection;
+            // Sigurohu që queue është deklaruar
+            channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+
+            var consumer = new EventingBasicConsumer(channel);
+
+            consumer.Received += (model, ea) =>
+            {
+                var body = ea.Body.ToArray();
+                var message = System.Text.Encoding.UTF8.GetString(body);
+
+                Console.WriteLine($"Message received: {message}");
+            };
+
+            // Filloni konsumimin e mesazheve
+            channel.BasicConsume(queueName, autoAck: true, consumer: consumer);
+
+            Console.WriteLine($"Waiting for messages in {queueName}. To exit press [CTRL+C]");
+            Console.ReadLine();
         }
-
-        public void ReceiveMessage(string queueName)
+        catch (Exception ex)
         {
-            // Create the channel outside the using block to have full control over its lifecycle
-            var channel = _rabbitMqConnection.CreateChannel();
-
-            try
+            Console.WriteLine($"Error receiving message: {ex.Message}");
+        }
+        finally
+        {
+            // Sigurohu që kanali është mbyllur pas përdorimit
+            if (channel != null && channel.IsOpen)
             {
-                // Sigurohu që queue është deklaruar
-                channel.QueueDeclare(queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
-
-                var consumer = new EventingBasicConsumer(channel);
-
-                consumer.Received += (model, ea) =>
-                {
-                    var body = ea.Body.ToArray();
-                    var message = Encoding.UTF8.GetString(body);
-
-                    Console.WriteLine($"Message received: {message}");
-                };
-
-                // Filloni konsumimin e mesazheve
-                channel.BasicConsume(queueName, autoAck: true, consumer: consumer);
-
-                Console.WriteLine($"Waiting for messages in {queueName}. To exit press [CTRL+C]");
-                Console.ReadLine();
-            }
-            finally
-            {
-                // Ensure the channel is closed after use
-                if (channel != null && channel.IsOpen)
-                {
-                    channel.Close();
-                }
+                channel.Close();
             }
         }
-
     }
 }

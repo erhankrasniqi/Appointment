@@ -16,31 +16,38 @@ namespace UserManagement.Application.Commands
 
         public async Task<Result> Handle(AddUserCommand request, CancellationToken cancellationToken)
         {
-            // Nëse dëshiron të kontrollosh në bazë të AuthId për ekzistencë
+            // Kontrollo nëse ekziston përdoruesi me AuthId
             bool userExists = await _userRepository.ExistsByAuthIdAsync(request.AuthId);
             if (userExists)
             {
                 return Result.Failure("User already exists");
             }
 
-            var address = new Address
+            // Krijo adresën nëse është dërguar
+            Address? address = null;
+            if (request.Address != null)
             {
-                Street = request.Address.Street,
-                City = request.Address.City,
-                PostalCode = request.Address.PostalCode,
-                Country = request.Address.Country,
-                Phone = request.Address.Phone
-            };
+                address = new Address
+                {
+                    Street = request.Address.Street,
+                    City = request.Address.City,
+                    PostalCode = request.Address.PostalCode,
+                    Country = request.Address.Country,
+                    Phone = request.Address.Phone
+                };
+            }
 
+            // Krijo entitetin e përdoruesit
             var user = new User(
-                request.Name,
-                request.SurnameName,
-                request.BrithDate,
-                request.AuthId,
-                address
+                name: request.Name ?? "Unknown",
+                surnameName: request.SurnameName ?? "Unknown",
+                brithDate: request.BrithDate ?? new DateTime(2000, 1, 1),
+                authId: request.AuthId,
+                address: address
             );
 
             await _userRepository.AddAsync(user);
+
             return Result.Success("User added successfully");
         }
     }
