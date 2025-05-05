@@ -13,7 +13,7 @@ public class MessageReceiver
 
     public void ReceiveMessage(string queueName)
     {
-        var channel = _rabbitMqConnection.CreateChannel(); / 
+        var channel = _rabbitMqConnection.CreateChannel();  
 
         try
         { 
