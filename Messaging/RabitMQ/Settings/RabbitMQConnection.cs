@@ -19,20 +19,17 @@ namespace Messaging.RabbitMQ.Settings
         }
 
         public IModel CreateChannel()
-        {
-            // Kontrollo nëse lidhja është e hapur
+        { 
             if (_connection == null || !_connection.IsOpen)
             {
                 _connection = _factory.CreateConnection();
             }
-
-            // Krijo dhe kthe kanalin
+             
             return _connection.CreateModel();
         }
 
         public void CloseConnection()
-        {
-            // Sigurohu që të mbyllësh lidhjen dhe kanalin për të shmangur leaks
+        { 
             _connection?.Close();
         }
 

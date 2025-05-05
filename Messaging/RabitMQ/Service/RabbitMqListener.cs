@@ -16,8 +16,7 @@ namespace Messaging.RabitMQ.Service
         {
             _subscriber.SubscribeToQueue("emri-i-queues", message =>
             {
-                Console.WriteLine($"U pranua mesazhi: {message}");
-                // ose lësho ndonjë event/domain logic këtu
+                Console.WriteLine($"U pranua mesazhi: {message}"); 
             });
 
             return Task.CompletedTask;

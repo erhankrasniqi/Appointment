@@ -9,8 +9,7 @@ namespace UserManagement.Domain.Entities
         public DateTime BirthDate { get; private set; }
         public int AuthId { get; private set; }
         public Address Address { get; private set; }
-
-        // Konstruktor pa parametra
+         
         public User() { }
         public User(string name, string surnameName, DateTime brithDate, int authId, Address address)
         {

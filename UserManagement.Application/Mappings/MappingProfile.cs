@@ -8,7 +8,7 @@ namespace UserManagement.Application.Mappings
     {
         public MappingProfile()
         {
-            CreateMap<User, UserDto>();  // Krijon mapimin mes User dhe UserDto
+            CreateMap<User, UserDto>();  
         }
     }
 }

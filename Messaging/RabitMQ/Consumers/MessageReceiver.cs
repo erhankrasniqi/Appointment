@@ -13,11 +13,10 @@ public class MessageReceiver
 
     public void ReceiveMessage(string queueName)
     {
-        var channel = _rabbitMqConnection.CreateChannel(); // ✅ Përdor CreateChannel
+        var channel = _rabbitMqConnection.CreateChannel(); / 
 
         try
-        {
-            // Sigurohu që queue është deklaruar
+        { 
             channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
 
             var consumer = new EventingBasicConsumer(channel);

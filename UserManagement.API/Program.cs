@@ -14,22 +14,18 @@ using Messaging.RabitMQ.Interfaces;
 using Messaging.RabitMQ.Service; 
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
+ 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
-// Configure RabbitMQSettings in DI container
+ 
 builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMqSettings"));
-
-// Create RabbitMQ connection
+ 
 builder.Services.AddSingleton<RabbitMQConnection>(provider =>
 {
     var settings = provider.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
     return new RabbitMQConnection(settings.HostName, "guest", "guest"); // Use proper credentials
 });
-
-// Configure Swagger and JWT authorization
+ 
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -37,8 +33,7 @@ builder.Services.AddSwaggerGen(c =>
         Title = "UsereManagment API",
         Version = "v1"
     });
-
-    // Add security definition for JWT Authorization
+     
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
@@ -62,24 +57,19 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
-// Configure DbContext
+ 
 builder.Services.AddDbContext<UserManagmentDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Register JWT token generator and other services
+ 
 builder.Services.AddScoped<IUserRepository, UserRepository>(); 
 builder.Services.AddSingleton<IMessagePublisher, RabbitMqService>();
 builder.Services.AddHostedService<UserRegisteredConsumer>();
 
-
-// Register AutoMapper
+ 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-// Register MediatR
+ 
 builder.Services.AddMediatR(typeof(AddUserCommand).Assembly);
-
-// Configure JWT Authentication
+ 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -98,22 +88,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
+ 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "UsereManagment API V1");
-        c.RoutePrefix = "swagger"; // Open Swagger UI at /swagger/index.html
+        c.RoutePrefix = "swagger";  
     });
 }
 
 app.UseHttpsRedirection();
-
-// Enable Authentication and Authorization
-app.UseAuthentication(); // Necessary to validate JWT token
+ 
+app.UseAuthentication();  
 app.UseAuthorization();
 
 app.MapControllers();

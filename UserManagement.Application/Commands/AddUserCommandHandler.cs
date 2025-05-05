@@ -15,15 +15,13 @@ namespace UserManagement.Application.Commands
         }
 
         public async Task<Result> Handle(AddUserCommand request, CancellationToken cancellationToken)
-        {
-            // Kontrollo nëse ekziston përdoruesi me AuthId
+        { 
             bool userExists = await _userRepository.ExistsByAuthIdAsync(request.AuthId);
             if (userExists)
             {
                 return Result.Failure("User already exists");
             }
-
-            // Krijo adresën nëse është dërguar
+             
             Address? address = null;
             if (request.Address != null)
             {
@@ -36,8 +34,7 @@ namespace UserManagement.Application.Commands
                     Phone = request.Address.Phone
                 };
             }
-
-            // Krijo entitetin e përdoruesit
+             
             var user = new User(
                 name: request.Name ?? "Unknown",
                 surnameName: request.SurnameName ?? "Unknown",

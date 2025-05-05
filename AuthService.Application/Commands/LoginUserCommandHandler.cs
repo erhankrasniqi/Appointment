@@ -32,7 +32,7 @@ namespace AuthService.Application.Commands
             }
 
             var token = _jwtTokenGenerator.GenerateToken(user);
-            return Result.Success(token); // Dërgohet tokeni në përgjigje
+            return Result.Success(token);  
         }
 
     }

@@ -11,7 +11,7 @@ namespace UserManagement.Infrastructure.Data
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../UserManagement.API"))
-                .AddJsonFile("appsettings.json") // nëse ndodhet në këtë rrugë
+                .AddJsonFile("appsettings.json")  
                 .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<UserManagmentDbContext>();

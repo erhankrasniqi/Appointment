@@ -6,6 +6,7 @@ using MediatR;
 using Messaging.RabitMQ.Interfaces;
 using SharedKernel.Contracts;
 
+
 namespace AuthService.Application.Commands
 {
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Result>
@@ -35,8 +36,7 @@ namespace AuthService.Application.Commands
             var user = new User(request.FullName, request.Email, passwordHash);
 
             await _userRepository.AddAsync(user);
-
-            // Publiko eventin në RabbitMQ
+             
             var userRegisteredEvent = new UserRegisteredEvent
             {
                 UserId = user.Id,

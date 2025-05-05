@@ -23,8 +23,7 @@ namespace UserManagement.Application.Listeners
         }
 
         public void StartListeningForUserRegisteredEvent()
-        {
-            // Dëgjo për mesazhe në RabbitMQ dhe kur merr mesazhin, thirri metodën që do të përpunojë
+        { 
             _messageSubscriber.SubscribeToQueue("user_registration_queue", HandleUserRegisteredEvent);
         }
 
@@ -36,11 +35,8 @@ namespace UserManagement.Application.Listeners
             {
                 AuthId = userRegisteredEvent.UserId,
                 Name = "Erhan",
-                SurnameName = "Krasniqi",
-                // Mund të shtoni të dhënat e tjera për regjistrimin e përdoruesit
-            };
-
-            // Dërgo komandën për regjistrimin e përdoruesit
+                SurnameName = "Krasniqi", 
+            }; 
             await _mediator.Send(addUserCommand);
         }
     }

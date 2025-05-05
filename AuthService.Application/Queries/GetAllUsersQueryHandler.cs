@@ -25,7 +25,7 @@ namespace AuthService.Application.Queris
         public async Task<List<UserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var users = await _userRepository.GetAllAsync();
-            return _mapper.Map<List<UserDto>>(users);  // Konverto nga User në UserDto
+            return _mapper.Map<List<UserDto>>(users);  
         }
     }
 }

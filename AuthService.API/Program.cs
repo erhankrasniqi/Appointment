@@ -16,23 +16,19 @@ using Messaging.RabitMQ.Interfaces;
 using Messaging.RabitMQ.Service;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
+ 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
-// Shto RabbitMQSettings në DI container
+ 
 builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMqSettings"));
-
-// Krijo RabbitMQConnection
+ 
 
 builder.Services.AddSingleton<RabbitMQConnection>(provider =>
 {
     var settings = provider.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
-    return new RabbitMQConnection(settings.HostName, "guest", "guest"); // Përdorni kredencialet e duhura
+    return new RabbitMQConnection(settings.HostName, "guest", "guest");  
 });
-
-// Shto Swagger dhe konfigurimin e autorizimit me JWT
+ 
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -40,8 +36,7 @@ builder.Services.AddSwaggerGen(c =>
         Title = "AuthService API",
         Version = "v1"
     });
-
-    // Shto përkufizimin për autorizimin JWT në Swagger
+     
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
@@ -65,27 +60,22 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
-// Shto konfigurimin e DbContext
+ 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Regjistro JWT token generator dhe shërbime të tjera
+ 
 builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddSingleton<IMessagePublisher, RabbitMqService>();
 builder.Services.AddSingleton<IUserRegisteredPublisher, UserRegisteredPublisher>();
-
-// Regjistro AutoMapper
+ 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-// Regjistro MediatR 
+ 
 builder.Services.AddMediatR(typeof(LoginUserCommand).Assembly);
 builder.Services.AddMediatR(typeof(RegisterUserCommand).Assembly);
 
-
-// Konfigurimi i JWT Authentication
+ 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -104,22 +94,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
+ 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "AuthService API V1");
-        c.RoutePrefix = "swagger"; // e bën të hapet te /swagger/index.html
+        c.RoutePrefix = "swagger";  
     });
 }
 
 app.UseHttpsRedirection();
-
-// Aktivizoni Authentication dhe Authorization
-app.UseAuthentication(); // Kjo është e nevojshme për të validuar tokenin JWT
+ 
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapControllers();

@@ -21,7 +21,7 @@ public class UserRegisteredConsumer : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var channel = _connection.CreateChannel(); // ✅ Përdor CreateChannel
+        var channel = _connection.CreateChannel();  
 
         channel.QueueDeclare(
             queue: "user_registered_queue",
@@ -43,15 +43,14 @@ public class UserRegisteredConsumer : BackgroundService
 
                 if (message is not null)
                 {
-                    using var scope = _serviceProvider.CreateScope(); // ✅ CreateScope
+                    using var scope = _serviceProvider.CreateScope();  
 
                     var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
                     var command = new UserRegistrationDTO
                     {
                         AuthId = message.UserId,
-                        Email = message.Email,
-                        // Pjesa tjetër (Name, Surname, etj.) do të shtohet nëse i kemi në event
+                        Email = message.Email, 
                     };
 
                     await mediator.Send(command);
@@ -60,8 +59,7 @@ public class UserRegisteredConsumer : BackgroundService
                 channel.BasicAck(ea.DeliveryTag, multiple: false);
             }
             catch (Exception ex)
-            {
-                // log errorin nëse do
+            { 
                 Console.WriteLine($"Error consuming message: {ex.Message}");
             }
         };

@@ -10,6 +10,6 @@ namespace SharedKernel
     {
         public int AuthId { get; set; }
         public string Email { get; set; }
-        public string FullName { get; set; }  // Mund të shtohet nëse është pjesë e event-it
+        public string FullName { get; set; }   
     }
 }
